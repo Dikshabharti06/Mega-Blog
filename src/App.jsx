@@ -1,15 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {useDispatch} from 'react-redux'
+import authservice from './appwrite/auth';
+import {login, logout } from './store/authSlice';
 
 function App() {
+  const [loading, setLoading]= useState(true);
+  const dispatch= useDispatch();
+  useEffect(()=>{
+    authservice.getCurrentUser()
+    .then((userData)=>{
+      if(userData){
+        dispatch(login({userData}))
+      }
+      else{
+        dispatch(logout())
+      }
+    })
+    .finally(()=>(setLoading(false)))
+  },[])
+
   //for treating env values as strings we have config file
   console.log(import.meta.env.VITE_KEY_VALUE);
   console.log(import.meta.env);
-  return (
-    <>
-    <div>
-    Learning with appwrite</div>
-    </>
-  )
+
+  return !loading?(
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <Header/>
+        <main>
+          {/*<Outlet/> */}
+        </main>
+        <Footer/>
+      </div>
+    </div>
+  ): null
 }
 
 export default App

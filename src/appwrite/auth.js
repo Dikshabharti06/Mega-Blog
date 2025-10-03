@@ -2,19 +2,19 @@ import config from '../config/config.js';
 import { Client, Account, ID } from "appwrite";
 
 export class AuthService{
-    Client = new Client();
+    client = new Client();
     //not putting id and endpoint here and making a constructor to utilise the prop of obj
-    Account;
+    account;
     constructor(){
-        this.Client
+        this.client
         .setEndpoint(config.appwriteUrl)
         .setProject(config.appwriteProjectId);
-        this.Account= new Account(this.Client);
+        this.account= new Account(this.client);
 
     }
     async createAccount({email, password, name}){
         try{
-            const userAccount= await this.Account.create(ID.unique(), email, password, name)
+            const userAccount= await this.account.create(ID.unique(), email, password, name)
             if(userAccount){
                 //call another method
                 return this.login({email, password});
@@ -30,7 +30,7 @@ export class AuthService{
     async login({email, password}){
         try{        
         //direct return without holding it in var
-        return await this.Account.createEmailPasswordSession(email, password);
+        return await this.account.createEmailPasswordSession(email, password);
         }
         catch(error){
             throw error;
@@ -38,7 +38,7 @@ export class AuthService{
     }
     async getCurrentUser(){
         try{
-          return await this.Account.get(); 
+          return await this.account.get(); 
         }
         catch(error){
             console.log("Appwrite Serive:: getCurrentUser::error", error);
@@ -48,7 +48,7 @@ export class AuthService{
     }
     async logout(){
         try{
-           return await this.Account.deleteSessions(); 
+           return await this.account.deleteSessions(); 
         }
         catch(error){
             console.log("Appwrite Serive:: logout::error", error);
