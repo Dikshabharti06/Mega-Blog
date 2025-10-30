@@ -1,5 +1,5 @@
 import React from "react";
-import LogoutBtn from "../header/logoutBtn"; 
+import LogoutBtn from "../logoutBtn"; 
 import Logo from '../Logo'
 
 function Container({Children}){

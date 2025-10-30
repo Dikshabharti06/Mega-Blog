@@ -12,6 +12,7 @@ export class Service{
         this.databases=new Databases(this.client);
         this.bucket= new Storage(this.client);
     }
+    
     async createPost({title, slug, content, featuredImage, status, userId}){
         try {
             return await this.databases.createDocument(
@@ -30,6 +31,7 @@ export class Service{
             console.log("Appwrite service :: Createpost :: error", error)
         }
     }
+    
     async updatePost(slug, {title, content, featuredImage, status, userId}){
         try {
             return await this.databases.updateDocument(
@@ -117,6 +119,7 @@ export class Service{
             fileId
         )
     }
+    
 }
 
 const service= new Service();
