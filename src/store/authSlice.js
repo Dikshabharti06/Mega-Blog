@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { todoSlice } from "../../../11reduxtoolkit/src/features/tools/todoSlice";
+import { createSlice } from "@reduxjs/toolkit"
 const initialState={
     status: false,
     userData:null
