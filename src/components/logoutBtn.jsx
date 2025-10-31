@@ -13,7 +13,7 @@ function LogoutBtn(){
     return(
         <button
         className="inline-block px-2 py-6 duration-200 hover:bg-blue-200 rounded-full"
-        onChange={()=>(LogoutHandler())}>Logout</button>
+        onClick={()=>(LogoutHandler())}>Logout</button>
     )
 }
 export default LogoutBtn
