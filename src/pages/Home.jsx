@@ -2,16 +2,16 @@ import React, {useEffect, useState} from 'react'
 import service from '../appwrite/config1'
 import {Container, Postcard} from '../components'
 
-
 function Home() {
-  const [posts, setPost]= useState([])
-  useEffect(()=>{
-    service.getPosts((posts)=>{
-      if(posts){
-        setPost(posts.documents)
-      }
-    })
-  },[])
+    const [posts, setPosts] = useState([])
+
+    useEffect(() => {
+      service.getPosts().then((posts) => {
+            if (posts) {
+                setPosts(posts.documents)
+            }
+        })
+    }, [])
   if(posts.length===0) return(
     <div className='w-full py-8 mt-4 text-center'>
       <div className="flex flex-wrap">

@@ -12,11 +12,11 @@ export default function Post() {
 
     const userData = useSelector((state) => state.auth.userData);
 
-    const isAuthor = post && userData ? post.userId === userData.$id : false;
+    const isAuthor = post && userData ? post.UserId === userData.$id : false;
 
     useEffect(() => {
         if (slug) {
-            appwriteService.getPost(slug).then((post) => {
+            service.getPost(slug).then((post) => {
                 if (post) setPost(post);
                 else navigate("/");
             });
@@ -24,9 +24,9 @@ export default function Post() {
     }, [slug, navigate]);
 
     const deletePost = () => {
-        appwriteService.deletePost(post.$id).then((status) => {
+        service.deletePost(post.$id).then((status) => {
             if (status) {
-                appwriteService.deleteFile(post.featuredImage);
+                service.deleteFile(post.FeaturedImage);
                 navigate("/");
             }
         });
@@ -37,7 +37,7 @@ export default function Post() {
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
-                        src={appwriteService.getFilePreview(post.featuredImage)}
+                        src={service.getFilePreview(post.FeaturedImage)}
                         alt={post.title}
                         className="rounded-xl"
                     />
@@ -60,7 +60,7 @@ export default function Post() {
                 </div>
                 <div className="browser-css">
                     {/* content is in html so we need to parse it to show bold,etc features */}
-                    {parse(post.content)}
+                    {parse(post.Content)}
                     </div>
             </Container>
         </div>

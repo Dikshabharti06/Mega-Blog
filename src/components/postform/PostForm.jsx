@@ -9,7 +9,7 @@ function PostForm({post}) {
     const {register, handleSubmit, watch, setValue, control, getValues}= useForm({
         defaultValues:{
             title:post?.title || "",
-            content:post?.content || "",
+            Content:post?.Content || "",
             slug: post?.slug || "",
             status: post?.status || 'active',
         }
@@ -17,6 +17,10 @@ function PostForm({post}) {
     const navigate= useNavigate()
     const userData= useSelector(state=> state.auth.userData)
     const submit = async (data) => {
+      if (!userData || !userData.$id) {
+    alert("⚠️ Please log in before creating a post!");
+    return;
+  }
   if (post) {
     const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
 
@@ -24,10 +28,10 @@ function PostForm({post}) {
       await service.deleteFile(post.FeaturedImage);
     }
 
-    const dbPost = await service.updatePost(post.$id, {
-      ...data,
-      FeaturedImage: file ? file.$id : post.FeaturedImage,
-    });
+    const dbPost = await service.updatePost(slug, {
+                ...data,
+                FeaturedImage: file ? file.$id : post.FeaturedImage,
+            });
 
     if (dbPost) {
       navigate(`/post/${dbPost.$id}`);
@@ -90,7 +94,7 @@ const slugTransform= useCallback((value) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
-                <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
+                <RTE label="Content :" name="Content" control={control} defaultValue={getValues("Content")} />
             </div>
             <div className="w-1/3 px-2">
                 <Input
@@ -100,15 +104,19 @@ const slugTransform= useCallback((value) => {
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
-                {post && (
-                    <div className="w-full mb-4">
-                        <img
-                            src={service.getFilePreview(post.FeaturedImage)}
-                            alt={post.title}
-                            className="rounded-lg"
-                        />
+                {post && post.FeaturedImage ? (
+                  <div className="w-full mb-4">
+                    <img
+                    src={service.getFilePreview(post.FeaturedImage)}
+                    alt={post.title || "Post image"}
+                    className="rounded-lg"
+                    />
                     </div>
-                )}
+                    ) : (
+                    <div className="w-full mb-4 text-gray-400 italic">
+                      No featured image available
+                      </div>
+                    )}
                 <Select
                     options={["active", "inactive"]}
                     label="Status"

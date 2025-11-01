@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 export default function Header() {
   const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
-  console.log("Auth status:", authStatus)
 
   const navItems = [
     { name: "Home", slug: "/", active: true },
